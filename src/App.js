@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
+// import Radium, { StyleRoot } from "radium";
 import Person from "./Person/Person";
 
 class App extends Component {
@@ -7,89 +8,113 @@ class App extends Component {
   state = {
     persons: [
       {
+        id: "asd1",
         name: "Pasquale",
         age: 58
       },
       {
+        id: "asd2",
         name: "Claudia",
-        age: 58
+        age: 45
       },
       {
+        id: "asd3",
         name: "Susy",
-        age: 58
+        age: 2
       }
     ],
-    otherState: "no"
+    otherState: "no",
+    showPerson: false
   };
 
-  switchNameHandler = newName => {
-    this.setState({
-      persons: [
-        {
-          name: newName,
-          age: 58
-        },
-        {
-          name: "Claudia",
-          age: 58
-        },
-        {
-          name: "Susy",
-          age: 1
-        }
-      ]
-    });
-  };
+  deletePersonHandler(personIndex) {
+    // const persons = this.state.persons.slice();
+    const persons = [...this.state.persons];
+    persons.splice(personIndex, 1);
+    this.setState({ persons: persons });
+  }
 
-  nameChangedHandler = event => {
-    this.setState({
-      persons: [
-        {
-          name: "Pasquale",
-          age: 58
-        },
-        {
-          name: event.target.value,
-          age: 58
-        },
-        {
-          name: "Susy",
-          age: 1
-        }
-      ]
+  togglePersonHandler() {
+    const doesShow = this.state.showPerson;
+    this.setState({ showPerson: !doesShow });
+  }
+
+  nameChangedHandler(event, id) {
+    const personIndex = this.state.persons.findIndex(per => {
+      return per.id === id;
     });
-  };
+
+    const person = { ...this.state.persons[personIndex] };
+    person.name = event.target.value;
+
+    const persons = [...this.state.persons];
+    persons[personIndex] = person;
+
+    this.setState({ persons: persons });
+  }
+
   render() {
     const style = {
-      backgroundColor: "white",
+      backgroundColor: "green",
+      color: "white",
       font: "inherit",
       border: "1px solid blue",
       padding: "8px",
       cursor: "pointer"
+      // ":hover": {
+      //   backgroundColor: "lightgreen",
+      //   color: "black"
+      // }
     };
+
+    let persons = null;
+
+    if (this.state.showPerson) {
+      persons = (
+        <div>
+          {this.state.persons.map((person, index) => {
+            return (
+              <Person
+                click={() => this.deletePersonHandler(index)}
+                name={person.name}
+                age={person.age}
+                key={person.id}
+                changed={event => this.nameChangedHandler(event, person.id)}
+              />
+            );
+          })}
+        </div>
+      );
+
+      style.backgroundColor = "red";
+      // style[":hover"] = {
+      //   backgroundColor: "salmon",
+      //   color: "black"
+      // };
+    }
+
+    let classes = [];
+
+    if (this.state.persons.length <= 2) {
+      classes.push("red");
+    }
+
+    if (this.state.persons.length <= 1) {
+      classes.push("bold");
+    }
+
     return (
+      //<StyleRoot>
       <div className="App">
         <h1>Hi I'm react app</h1>
-        <p>this is a p</p>
-        <button style={style} onClick={() => this.switchNameHandler("cane")}>
-          Switch
+
+        <p className={classes.join(" ")}>this is a p</p>
+        <button style={style} onClick={() => this.togglePersonHandler()}>
+          Toggle
         </button>
-        <Person
-          name={this.state.persons[0].name}
-          age={this.state.persons[0].age}
-        />
-        <Person
-          click={this.switchNameHandler.bind(this, "gattino")}
-          name={this.state.persons[1].name}
-          age={this.state.persons[1].age}
-          changed={this.nameChangedHandler}>
-          Something here
-        </Person>
-        <Person
-          name={this.state.persons[2].name}
-          age={this.state.persons[2].age}
-        />
+        {persons}
       </div>
+      //</StyleRoot>
     );
   }
 }

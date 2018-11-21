@@ -1,7 +1,14 @@
 import React from "react";
+// import Radium from "radium";
 import "./Person.css";
 
 const person = props => {
+  // const style = {
+  //   "@media (min-widt: 500px)": {
+  //     width: "450px"
+  //   }
+  // };
+
   return (
     <div className="Person">
       <p onClick={props.click}>

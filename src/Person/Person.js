@@ -1,6 +1,6 @@
 import React from "react";
 // import Radium from "radium";
-import "./Person.css";
+import stili from "./Person.module.css";
 
 const person = props => {
   // const style = {
@@ -10,7 +10,7 @@ const person = props => {
   // };
 
   return (
-    <div className="Person">
+    <div className={stili.Person}>
       <p onClick={props.click}>
         I'm {props.name} and I'm {props.age} person!
       </p>

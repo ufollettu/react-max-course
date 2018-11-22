@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import "./App.css";
+import stili from "./App.modules.css";
 // import Radium, { StyleRoot } from "radium";
+
 import Person from "./Person/Person";
 
 class App extends Component {
@@ -54,20 +55,8 @@ class App extends Component {
   }
 
   render() {
-    const style = {
-      backgroundColor: "green",
-      color: "white",
-      font: "inherit",
-      border: "1px solid blue",
-      padding: "8px",
-      cursor: "pointer"
-      // ":hover": {
-      //   backgroundColor: "lightgreen",
-      //   color: "black"
-      // }
-    };
-
     let persons = null;
+    let btnClass = "";
 
     if (this.state.showPerson) {
       persons = (
@@ -85,31 +74,26 @@ class App extends Component {
           })}
         </div>
       );
-
-      style.backgroundColor = "red";
-      // style[":hover"] = {
-      //   backgroundColor: "salmon",
-      //   color: "black"
-      // };
+      btnClass = stili.Red;
     }
 
     let classes = [];
 
     if (this.state.persons.length <= 2) {
-      classes.push("red");
+      classes.push(stili.red);
     }
 
     if (this.state.persons.length <= 1) {
-      classes.push("bold");
+      classes.push(stili.bold);
     }
 
     return (
       //<StyleRoot>
-      <div className="App">
+      <div className={stili.App}>
         <h1>Hi I'm react app</h1>
 
         <p className={classes.join(" ")}>this is a p</p>
-        <button style={style} onClick={() => this.togglePersonHandler()}>
+        <button className={btnClass} onClick={() => this.togglePersonHandler()}>
           Toggle
         </button>
         {persons}
